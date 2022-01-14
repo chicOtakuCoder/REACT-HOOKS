@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import MovieList from './components/MovieList';
+import { Movies } from './components/Movies';
 
-function App() {
+
+const App = () => {
+  const [movies, setMovies] = useState ([...Movies]);
+  const [searchValue, setSearchValue] = useState ('');
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+      let result = Movies.filter(movie => movie.Title.toLowerCase().includes(searchValue.toLowerCase()))
+      setMovies (result)
+  };
+
+  const handleOnChange = (e) => {
+    setSearchValue(e.target.value);
+  }
+
+  const rating = (e) => {
+    let movieRating = Movies.filter(movie => movie.Rating === Number(e.target.value))
+    setMovies (movieRating)
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header className='header'>
+        <h1>MOVIVY</h1>
+        <form onSubmit={handleOnSubmit}>
+        <input className='search' 
+               type='search'
+               placeholder='Search...'
+               value={searchValue}
+               onChange={handleOnChange} />
+        </form>
+        <select className='rating' onChange={rating}>
+          <option> Rating: </option>
+          <option value='1'> 1 </option>
+          <option value='2'> 2 </option>
+          <option value='3'> 3 </option>
+          <option value='4'> 4 </option>
+          <option value='5'> 5 </option>
+        </select>       
       </header>
+      <div>
+        <MovieList movies = {movies}/>     
+      </div>
     </div>
-  );
+  
+  )
 }
 
-export default App;
+export default App
